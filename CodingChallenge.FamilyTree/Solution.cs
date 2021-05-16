@@ -7,7 +7,7 @@ namespace CodingChallenge.FamilyTree
     public class Solution
     {
         // take in a Person (tree) and flatten all of its direct and indirect descendants into single list
-        public static List<Person> Flatten(Person root)
+        public List<Person> Flatten(Person root)
         {
             var flattened = new List<Person> { root };
             var descendants = root.Descendants;
