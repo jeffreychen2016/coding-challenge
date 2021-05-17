@@ -33,5 +33,78 @@ namespace CodingChallenge.FamilyTree.Tests
             var result = new Solution().GetBirthMonth(tree, "Jeebus");
             Assert.AreEqual("",result);
         }
+
+        [Test]
+        public void test_flatten_it_should_flat_all_descendants_into_single_list()
+        {
+            var tree = new Person() 
+            {
+                Birthday = DateTime.Parse("2020-01-01"),
+                Descendants = new List<Person>()
+                {
+                    new Person()
+                    {
+                        Birthday = DateTime.Parse("2020-01-01"),
+                        Descendants = new List<Person>()
+                        {
+                            new Person() {Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>(), Name = "Name4" }
+                        },
+                        Name = "Name2"
+                    },
+                    new Person()
+                    {
+                        Birthday = DateTime.Parse("2020-01-01"),
+                        Descendants = new List<Person>()
+                        {
+                            new Person() {Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>(), Name = "Name5" } 
+                        },
+                        Name = "Name3"
+                    },
+                },
+                Name = "Name1"
+            };
+
+            var expected = new List<Person>()
+            {
+                new Person() 
+                { 
+                    Birthday = DateTime.Parse("2020-01-01"), 
+                    Descendants = new  List<Person>()
+                    {
+                        new Person() { Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>() {  new Person() {Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>(), Name = "Name4" }}, Name = "Name2"},
+                        new Person() { Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>() {  new Person() {Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>(), Name = "Name5" }}, Name = "Name3"}
+                    }, 
+                    Name = "Name1"},
+                new Person() 
+                { 
+                    Birthday = DateTime.Parse("2020-01-01"), 
+                    Descendants = new List<Person>() { new Person() {Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>(), Name = "Name4" }}, 
+                    Name = "Name2"
+                },
+                new Person() 
+                { 
+                    Birthday = DateTime.Parse("2020-01-01"), 
+                    Descendants = new List<Person>(), 
+                    Name = "Name4"
+                },
+                new Person() 
+                { 
+                    Birthday = DateTime.Parse("2020-01-01"), 
+                    Descendants = new List<Person>() { new Person() {Birthday = DateTime.Parse("2020-01-01"), Descendants = new List<Person>(), Name = "Name5" } }, 
+                    Name = "Name3"
+                },
+                new Person() 
+                { 
+                    Birthday = DateTime.Parse("2020-01-01"), 
+                    Descendants = new List<Person>(), 
+                    Name = "Name5"
+                },
+            };
+
+            var result = new Solution().Flatten(tree);
+
+            Assert.AreEqual(5, result.Count);
+            Assert.AreEqual(JsonConvert.SerializeObject(expected), JsonConvert.SerializeObject(result));
+        }
     }
 }
